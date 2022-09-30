@@ -8,6 +8,7 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <filesystem>
 
 #include "Utils.h"
 #include "Canvas.h"
@@ -49,6 +50,14 @@ std::string getString(char c)
     return 0;
 }
 
+bool FileExists(std::string filename){
+  std::ifstream file(filename);
+    if(file.is_open()){
+      return true;
+      file.close();
+    }
+    else return false;
+}
 
 int main()
 {
@@ -63,7 +72,6 @@ int main()
     //ToggleCanvas(canvas, 3, 3);
 
     std::string input = "",text;
-    std::ifstream LeArquivo("info.txt");
     int option = -1,row,col,entry,cont = 0;
 
     do
@@ -99,7 +107,10 @@ int main()
         
         case 2:
             if (cont == 0){
-              std::cout << "Nao foi executado nenhum comando";
+              UpdateCanvas(canvas);
+              std::cout << "\nNao foi executado nenhum comando.\n";
+              sleep_for(milliseconds(2500));
+              UpdateCanvas(canvas);
               break;
             }
             ClearCanvas(canvas);
@@ -124,7 +135,10 @@ int main()
         
         case 3:
             if (cont==0){
-              std::cout << "Nao foi executado nenhum comando\n";
+              UpdateCanvas(canvas);
+              std::cout << "\nNao foi executado nenhum comando.\n";
+              sleep_for(milliseconds(2500));
+              UpdateCanvas(canvas);
               break;
             }
             for (int i = 0;i < cont;i++){
@@ -142,8 +156,23 @@ int main()
             }
             break;
         
-        case 4:
+        case 4:{
+            std::ifstream LeArquivo("info.txt");
             getline(LeArquivo,text);
+            if (FileExists("info.txt") == false){
+              UpdateCanvas(canvas);
+              std::cout << "\nO arquivo nao foi encontrado.\n";
+              sleep_for(milliseconds(2500));
+              UpdateCanvas(canvas);
+              break;
+            }
+            if (text == ""){
+              UpdateCanvas(canvas);
+              std::cout << "\nO arquivo ainda nao tem comandos para executar.\n";
+              sleep_for(milliseconds(2500));
+              UpdateCanvas(canvas);
+              break;
+            }
             for (int i = 0;i < text.length();i++){
               if ((i >= 1) && (i%2 == 1)) cont++;
               Enqueue(fila,text[i]-48);
@@ -159,6 +188,7 @@ int main()
               Enqueue(fila,col);              
             }           
             break;
+          }
         case 5:
             std::cout << "Fim.\n\n";
             break;
