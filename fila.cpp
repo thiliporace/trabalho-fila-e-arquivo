@@ -51,6 +51,20 @@ Retorno Front(const Fila& fila)
 	return ret;
 }
 
+int Count(const Fila& fila){
+  return fila.contador;
+}
+
+Fila Clear(Fila& fila){
+  if (IsEmpty(fila)){
+    return fila;
+  }
+  for (int i = 0;i < CAPACIDADE_FILA;i++){
+    Dequeue(fila);
+  }
+  return fila;
+}
+
 bool IsFull(const Fila& fila)
 {
 	return fila.contador == CAPACIDADE_FILA;
